@@ -2,7 +2,7 @@ name: Error Code Reference Publisher
 on:
   push:
     branches:
-      - 'master'
+      - 'delopti-branch'
 
 jobs:
   error-ref:
@@ -37,9 +37,9 @@ jobs:
       - name: Checkout meshery
         uses: actions/checkout@v2
         with:
-          repository: 'meshery/meshery'
+          repository: 'DelusionalOptimist/meshery'
           # token with write access to meshery repository
-          token: ${{ secrets.GH_ACCESS_TOKEN }}
+          token: ${{ secrets.PAT }}
           path: 'meshery'
           ref: 'master'
 
