@@ -10,7 +10,7 @@ const (
 	ErrPublishCode        = "11001"
 	ErrPublishRequestCode = "11001"
 	ErrQueueSubscribeCode = "11001"
-	ErrNewCode = "reolace"
+	ErrNewCode            = "11072"
 )
 
 func ErrConnect(err error) error {
