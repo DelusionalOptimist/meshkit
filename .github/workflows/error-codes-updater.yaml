@@ -2,21 +2,23 @@ name: Meshkit Error Codes Utility Runner
 on:
   push:
     branches:
-      - 'master'
+      #- 'master'
+      - 'error-codes-test'
     paths:
       - '**.go'
 
 jobs:
   Update-error-codes:
     name: Error codes utility
-    if: github.repository == 'layer5io/meshkit'
+      #if: github.repository == 'layer5io/meshkit'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       # token here with write access to meshkit repo
         with:
-          token: ${{ secrets.GH_ACCESS_TOKEN }}
-          ref: 'master'
+          #token: ${{ secrets.GH_ACCESS_TOKEN }}
+          token: ${{ secrets.PAT }}
+          ref: 'error-codes-test'
 
       - name: Setup Go
         uses: actions/setup-go@v1
@@ -25,7 +27,7 @@ jobs:
 
       - name: Run utility
         run: |
-          go run github.com/layer5io/meshkit/cmd/errorutil -d . analyze --skip-dirs meshery -i ./helpers -o ./helpers
+          go run github.com/layer5io/meshkit/cmd/errorutil -d . update --skip-dirs meshery -i ./helpers -o ./helpers
 
       # to update errorutil* files in meshkit repo
       - name: Commit changes
@@ -42,9 +44,10 @@ jobs:
       - name: Checkout meshery
         uses: actions/checkout@v2
         with:
-          repository: 'meshery/meshery'
+          repository: 'DelusionalOptimist/meshery'
           # token with write access to meshery repository
-          token: ${{ secrets.GH_ACCESS_TOKEN }}
+          #token: ${{ secrets.GH_ACCESS_TOKEN }}
+          token: ${{ secrets.PAT }}
           path: 'meshery'
           ref: 'master'
 
@@ -55,6 +58,11 @@ jobs:
           cd ./meshery
           git config user.name l5io
           git config user.email ci@layer5.io
+          if git diff --exit-code --quiet
+          then
+            echo "No changes to commit"
+            exit
+          fi
           git add ./docs/_data/errorref/meshkit_errors_export.json
           git commit -m "[Docs] Error Code Reference: Updated codes for MeshKit library" --signoff
           git push origin master
