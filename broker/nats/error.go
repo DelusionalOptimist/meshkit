@@ -10,6 +10,7 @@ const (
 	ErrPublishCode        = "11001"
 	ErrPublishRequestCode = "11001"
 	ErrQueueSubscribeCode = "11001"
+	ErrNewCode = "reolace"
 )
 
 func ErrConnect(err error) error {
@@ -26,4 +27,7 @@ func ErrPublishRequest(err error) error {
 }
 func ErrQueueSubscribe(err error) error {
 	return errors.New(ErrQueueSubscribeCode, errors.Alert, []string{"Subscription failed"}, []string{err.Error()}, []string{}, []string{})
+}
+func ErrNew(err error) error {
+	return errors.New(ErrNewCode, errors.Alert, []string{"Subscription failed"}, []string{err.Error()}, []string{}, []string{})
 }
